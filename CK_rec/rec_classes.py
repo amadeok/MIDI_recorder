@@ -1,3 +1,4 @@
+import time
 import mido
 from mido import Message, MidiFile, MidiTrack
 
@@ -10,7 +11,7 @@ from mido import Message, MidiFile, MidiTrack
 
 """
 class CK_rec(object):
-    def __init__(self, port, device_id, tempo=120, debug=True):
+    def __init__(self, port, device_id, tempo=120, debug=True, save_after=60):
         self.port = port
         self.tempo = tempo
         self.debug = debug
@@ -19,9 +20,11 @@ class CK_rec(object):
         self.__track = MidiTrack()
         self.prepareTrack()
         self.__activesense = 0
+        self.last_note_on_time = time.time()
+        self.n_notes_since_last_save = 0
 
     def prepareTrack(self):
-        input("Press [ENTER] to start recording...")
+        #input("Press [ENTER] to start recording...")
         print("\n**** 📹 You are now RECORDING *****")
         print("(Press Control-C to stop the recording)\n")
         self.__mid.tracks.append(self.__track)
@@ -42,12 +45,16 @@ class CK_rec(object):
             if message[0] == self.on_id:
                 self.__track.append(Message('note_on', note=message[1], velocity=message[2], time=miditime))
                 self.__activesense = 0
+                self.last_note_on_time = time.time()
+                self.n_notes_since_last_save +=1
             elif message[0] == 176:
                 self.__track.append(Message('control_change', channel=1, control=message[1], value=message[2], time=miditime))
             else:
                 # print("note off!")
                 self.__track.append(Message('note_off', note=message[1], velocity=message[2], time=miditime))
                 self.__activesense = 0
+                self.last_note_on_time = time.time()
+
 
     def saveTrack(self, name):
         self.__mid.save('Recordings/'+name+'.mid')
