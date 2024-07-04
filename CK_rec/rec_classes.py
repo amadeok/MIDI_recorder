@@ -1,3 +1,4 @@
+import os
 import time
 import mido
 from mido import Message, MidiFile, MidiTrack
@@ -22,7 +23,8 @@ class CK_rec(object):
         self.__activesense = 0
         self.last_note_on_time = time.time()
         self.n_notes_since_last_save = 0
-
+        if not os.path.isdir("Recordings"):
+            os.mkdir("Recordings")
     def prepareTrack(self):
         #input("Press [ENTER] to start recording...")
         print("\n**** 📹 You are now RECORDING *****")
