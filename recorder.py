@@ -17,9 +17,9 @@ class AutoRecorder():
         self.exit = False
         self.device = "clone 3"
         self.myPort = 4
-        self.thread = None
+        self.__thread = None
         self.save_after = save_after
-
+    
         
     def loop(self):
         while 1:
@@ -32,7 +32,7 @@ class AutoRecorder():
             on_id = 144#codeK.get_device_id()
             print('your note on id is: ', on_id)
 
-            midiRec = CK_rec(self.myPort, on_id, debug=False, save_after=5)
+            midiRec = CK_rec(self.myPort, on_id, debug=True, save_after=5)
             codeK.set_callback(midiRec)
             
             while True:
@@ -62,11 +62,12 @@ class AutoRecorder():
             
     def start_on_other_thread(self):
         import threading
-        self.thread = threading.Thread(target=self.loop)
-        self.thread.start()
+        self.__thread = threading.Thread(target=self.loop)
+        self.__thread.start()
         
     def join(self):
-        self.thread.join()
+        if self.__thread:
+            self.__thread.join()
         
     def stop(self):
         self.exit = True

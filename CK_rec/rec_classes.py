@@ -51,6 +51,10 @@ class CK_rec(object):
                 self.n_notes_since_last_save +=1
             elif message[0] == 176:
                 self.__track.append(Message('control_change', channel=1, control=message[1], value=message[2], time=miditime))
+                self.__activesense = 0
+                self.last_note_on_time = time.time()
+                # self.n_notes_since_last_save +=1
+                print("control change")
             else:
                 # print("note off!")
                 self.__track.append(Message('note_off', note=message[1], velocity=message[2], time=miditime))
