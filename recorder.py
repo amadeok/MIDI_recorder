@@ -13,12 +13,13 @@ import signal
 
 
 class AutoRecorder():
-    def __init__(self, save_after=60) -> None:  
+    def __init__(self, save_after=60, recording_folder = None) -> None:  
         self.exit = False
         self.device = "clone 3"
         self.myPort = 4
         self.__thread = None
         self.save_after = save_after
+        self.recording_folder = recording_folder
     
         
     def loop(self):
@@ -32,7 +33,7 @@ class AutoRecorder():
             on_id = 144#codeK.get_device_id()
             print('your note on id is: ', on_id)
 
-            midiRec = CK_rec(self.myPort, on_id, debug=True, save_after=5)
+            midiRec = CK_rec(self.myPort, on_id, debug=True, save_after=5, recording_folder=self.recording_folder)
             codeK.set_callback(midiRec)
             
             while True:
@@ -72,8 +73,8 @@ class AutoRecorder():
     def stop(self):
         self.exit = True
 
-if __name__ == "__main__":
-    autorec = AutoRecorder(10)
+if __name__ == "__main__": 
+    autorec = AutoRecorder(10, recording_folder=os.path.expandvars(r"C:\Users\%username%\Documents\Studio One\Songs\midi_backups"))
     autorec.start_on_other_thread()
     #time.sleep(5)
     #autorec.stop()

@@ -12,7 +12,7 @@ from mido import Message, MidiFile, MidiTrack
 
 """
 class CK_rec(object):
-    def __init__(self, port, device_id, tempo=120, debug=True, save_after=60):
+    def __init__(self, port, device_id, tempo=120, debug=True, save_after=60, recording_folder = None):
         self.port = port
         self.tempo = tempo
         self.debug = debug
@@ -23,8 +23,15 @@ class CK_rec(object):
         self.__activesense = 0
         self.last_note_on_time = time.time()
         self.n_notes_since_last_save = 0
-        if not os.path.isdir("Recordings"):
-            os.mkdir("Recordings")
+        if recording_folder:
+            self.recording_folder = recording_folder
+            assert(os.path.isdir(self.recording_folder))
+            print(f"Using given recording folder {self.recording_folder}")
+        else:
+            self.recording_folder = "Recordings"
+            if not os.path.isdir("Recordings"):
+                os.mkdir("Recordings")
+                
     def prepareTrack(self):
         #input("Press [ENTER] to start recording...")
         print("\n**** 📹 You are now RECORDING *****")
@@ -63,5 +70,6 @@ class CK_rec(object):
 
 
     def saveTrack(self, name):
-        self.__mid.save('Recordings/'+name+'.mid')
+        save_path = os.path.join(self.recording_folder, name+'.mid')
+        self.__mid.save(save_path)
         print("\nRecording saved as "+name+".mid in the Recordings folder\n")
