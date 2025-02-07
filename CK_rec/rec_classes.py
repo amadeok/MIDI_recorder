@@ -47,7 +47,7 @@ class CK_rec(object):
         if message[0] != 254: #ignore active sense
             miditime = int(round(mido.second2tick(self.__activesense, self.__mid.ticks_per_beat, mido.bpm2tempo(self.tempo))))
             if self.debug:
-                print('deltatime: ', deltatime, 'msg: ', message, 'activecomp: ', self.__activesense)
+                print(f'deltatime:  {deltatime:7.4f} msg: {str(message):25} activecomp:  {self.__activesense:7.4f}')
             else:
                 #only print note on
                 if message[0] == 144: print(message[1])
@@ -61,7 +61,7 @@ class CK_rec(object):
                 self.__activesense = 0
                 self.last_note_on_time = time.time()
                 # self.n_notes_since_last_save +=1
-                print("control change")
+                # print("control change")
             else:
                 # print("note off!")
                 self.__track.append(Message('note_off', note=message[1], velocity=message[2], time=miditime))
