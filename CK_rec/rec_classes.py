@@ -3,6 +3,13 @@ import time
 import mido
 from mido import Message, MidiFile, MidiTrack
 
+# t = time.time()
+# t_ = time.perf_counter()
+# time.sleep(1)
+# t1 = time.time()
+# t1_ = time.perf_counter()
+# print(t1-t, t1_ - t_)
+
 # Class for handling the recording
 """
 @port is the midi input port
@@ -21,7 +28,7 @@ class CK_rec(object):
         self.__track = MidiTrack()
         self.prepareTrack()
         self.__activesense = 0
-        self.last_note_on_time = time.time()
+        self.last_note_on_time = time.perf_counter()
         self.n_notes_since_last_save = 0
         if recording_folder:
             self.recording_folder = recording_folder
@@ -54,19 +61,19 @@ class CK_rec(object):
             if message[0] == self.on_id:
                 self.__track.append(Message('note_on', note=message[1], velocity=message[2], time=miditime))
                 self.__activesense = 0
-                self.last_note_on_time = time.time()
+                self.last_note_on_time = time.perf_counter()
                 self.n_notes_since_last_save +=1
             elif message[0] == 176:
                 self.__track.append(Message('control_change', channel=1, control=message[1], value=message[2], time=miditime))
                 self.__activesense = 0
-                self.last_note_on_time = time.time()
+                self.last_note_on_time = time.perf_counter()
                 # self.n_notes_since_last_save +=1
                 # print("control change")
             else:
                 # print("note off!")
                 self.__track.append(Message('note_off', note=message[1], velocity=message[2], time=miditime))
                 self.__activesense = 0
-                self.last_note_on_time = time.time()
+                self.last_note_on_time = time.perf_counter()
 
 
     def saveTrack(self, name):
