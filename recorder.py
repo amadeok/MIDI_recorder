@@ -37,11 +37,11 @@ class AutoRecorder():
             codeK.set_callback(midiRec)
             
             while True:
-                d = time.time() - midiRec.last_note_on_time
+                d = time.perf_counter() - midiRec.last_note_on_time
                 if d > self.save_after:
                     #raise Exception("break")
                     print("timeout")
-                    midiRec.last_note_on_time = time.time()
+                    midiRec.last_note_on_time = time.perf_counter()
                     break
                 print("elapsed time", round(d, 3),  " of ", self.save_after)
                 time.sleep(1)

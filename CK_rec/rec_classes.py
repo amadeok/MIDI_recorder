@@ -10,7 +10,7 @@ from mido import Message, MidiFile, MidiTrack
 # t1_ = time.perf_counter()
 # print(t1-t, t1_ - t_)
 
-# Class for handling the recording
+
 """
 @port is the midi input port
 @device_id is the id passed for note-on messages (sometimes keyboards pass note-off as a different id or as velocity=0)
