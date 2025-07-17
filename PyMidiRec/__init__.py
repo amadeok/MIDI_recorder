@@ -1,16 +1,9 @@
-import time
-import rtmidi, mido, datetime
+import time,os
+import  mido, datetime
 #import from parrentdir
-import sys
-import os
-import inspect
-currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
-parentdir = os.path.dirname(currentdir)
-sys.path.insert(0,parentdir)
-from CK_rec.setup import Setup
-from CK_rec.rec_classes import CK_rec
-import signal
+from . import setup_, rec_classes
 
+# from setup_ import Setup
 
 class AutoRecorder():
     def __init__(self, save_after=60, recording_folder = None) -> None:  
@@ -21,10 +14,9 @@ class AutoRecorder():
         self.save_after = save_after
         self.recording_folder = recording_folder
     
-        
     def loop(self):
         while 1:
-            codeK = Setup()
+            codeK = setup_.Setup()
             for i, d in enumerate(mido.get_input_names()):
                 if self.device in d:
                     self.myPort = i
@@ -33,7 +25,7 @@ class AutoRecorder():
             on_id = 144#codeK.get_device_id()
             print('your note on id is: ', on_id)
 
-            midiRec = CK_rec(self.myPort, on_id, debug=True, save_after=5, recording_folder=self.recording_folder)
+            midiRec = rec_classes.CK_rec(self.myPort, on_id, debug=True, save_after=5, recording_folder=self.recording_folder)
             codeK.set_callback(midiRec)
             
             while True:
