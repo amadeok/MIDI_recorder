@@ -3,12 +3,7 @@ import time
 import mido
 from mido import Message, MidiFile, MidiTrack
 
-# t = time.time()
-# t_ = time.perf_counter()
-# time.sleep(1)
-# t1 = time.time()
-# t1_ = time.perf_counter()
-# print(t1-t, t1_ - t_)
+
 
 
 """

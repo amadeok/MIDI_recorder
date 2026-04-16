@@ -9,7 +9,7 @@ class AutoRecorder():
     def __init__(self, save_after=60, recording_folder = None) -> None:  
         self.exit = False
         self.device = "clone 3"
-        self.myPort = 4
+        self.myPort = None
         self.__thread = None
         self.save_after = save_after
         self.recording_folder = recording_folder
@@ -21,6 +21,7 @@ class AutoRecorder():
                 if self.device in d:
                     self.myPort = i
                     break
+            assert(self.myPort is not None), f"Could not find MIDI device with name containing '{self.device}'"
             codeK.open_port(self.myPort)
             on_id = 144#codeK.get_device_id()
             print('your note on id is: ', on_id)
